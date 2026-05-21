@@ -44,5 +44,5 @@ and this project follows semantic versioning once public releases begin.
 - Signed-index fixture matrix covering valid, tampered, unsupported-host, missing-secret, and confirmation-required flows.
 - Threat-model documentation covering signed registries, remote tools, secrets, audit, and learned usage signals.
 
-[Unreleased]: https://github.com/nexara-rs/nexara/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/nexara-rs/nexara/releases/tag/v0.1.0
+[Unreleased]: https://github.com/deliberium/nexara/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/deliberium/nexara/releases/tag/v0.1.0

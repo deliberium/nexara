@@ -5,9 +5,9 @@ use base64::engine::general_purpose::STANDARD as BASE64;
 use ed25519_dalek::{Signer, SigningKey};
 use nexara_core::ActionClass;
 use nexara_registry::{
-    Ed25519SignatureVerifier, HostRequirements, SignedSkillIndex, SignedSkillIndexEntry,
-    SignedSkillIndexPublisher, SignedSkillIndexSignature, SignatureVerifier, SkillPublisherTrust,
-    SkillRuntime, parse_skill_manifest_str, validate_host_requirements,
+    Ed25519SignatureVerifier, HostRequirements, SignatureVerifier, SignedSkillIndex,
+    SignedSkillIndexEntry, SignedSkillIndexPublisher, SignedSkillIndexSignature,
+    SkillPublisherTrust, SkillRuntime, parse_skill_manifest_str, validate_host_requirements,
 };
 
 const VALID: &str = r#"
@@ -203,7 +203,8 @@ fn skill_entry(
         id: id.to_string(),
         version: "0.1.0".to_string(),
         manifest_url: format!("https://registry.example.com/{id}/manifest.toml"),
-        manifest_sha256: "7f83b1657ff1fc53b92dc18148a1d65dfa135d0f114b6b26f1b4d3e6a1d8f1d6".to_string(),
+        manifest_sha256: "7f83b1657ff1fc53b92dc18148a1d65dfa135d0f114b6b26f1b4d3e6a1d8f1d6"
+            .to_string(),
         trust_tier: SkillPublisherTrust::Community,
         runtime: SkillRuntime::NexaraHttp,
         action_class: if requires_confirmation {

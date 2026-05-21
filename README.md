@@ -1,6 +1,6 @@
 # Nexara
 
-[![CI](https://img.shields.io/badge/ci-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
+[![CI](https://github.com/deliberium/nexara/actions/workflows/ci.yml/badge.svg)](https://github.com/deliberium/nexara/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 Nexara is a policy-bound capability runtime for AI systems. It gives hosts a
