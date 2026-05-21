@@ -1,7 +1,13 @@
 # Nexara
 
-[![CI](https://github.com/deliberium/nexara/actions/workflows/ci.yml/badge.svg)](https://github.com/deliberium/nexara/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+<p align="center">
+  <a href="https://github.com/deliberium/nexara/actions/workflows/ci.yml?query=branch%3Amaster">
+    <img src="https://github.com/deliberium/nexara/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI">
+  </a>
+  <a href="https://github.com/deliberium/nexara/blob/master/LICENSE.md">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT">
+  </a>
+</p>
 
 Nexara is a policy-bound capability runtime for AI systems. It gives hosts a
 neutral way to discover, rank, expose, call, audit, and administer tools without
