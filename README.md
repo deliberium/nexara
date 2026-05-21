@@ -1,7 +1,7 @@
 # Nexara
 
-[![CI](https://github.com/nexara-rs/nexara/actions/workflows/ci.yml/badge.svg)](https://github.com/nexara-rs/nexara/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/nexara-rs/nexara)](LICENSE.md)
+[![CI](https://img.shields.io/badge/ci-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 Nexara is a policy-bound capability runtime for AI systems. It gives hosts a
 neutral way to discover, rank, expose, call, audit, and administer tools without
