@@ -1,0 +1,13 @@
+[package]
+name = "nexara-example-learning-signals"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+anyhow.workspace = true
+nexara-core = { path = "../../crates/nexara-core" }
+nexara-learning = { path = "../../crates/nexara-learning" }
+serde_json.workspace = true

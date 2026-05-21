@@ -1,0 +1,57 @@
+[workspace]
+members = [
+    "crates/nexara",
+    "crates/nexara-core",
+    "crates/nexara-registry",
+    "crates/nexara-secrets",
+    "crates/nexara-remote",
+    "crates/nexara-runtime",
+    "crates/nexara-learning",
+    "crates/nexara-learning-memory",
+    "crates/nexara-learning-jsonl",
+    "crates/nexara-learning-sled",
+    "crates/nexara-compat-qwen",
+    "crates/nexara-server",
+    "examples/custom-remote-discovery",
+    "examples/custom-skill-index",
+    "examples/embedded-basic",
+    "examples/learning-signals",
+    "examples/local-http-server",
+]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+description = "Policy-bound capability and tool runtime for AI systems"
+repository = "https://github.com/nexara-rs/nexara"
+homepage = "https://github.com/nexara-rs/nexara"
+readme = "README.md"
+keywords = ["agents", "tools", "policy", "capabilities", "ai"]
+categories = ["api-bindings", "authentication", "config"]
+
+[workspace.dependencies]
+aes-gcm-siv = "0.11"
+anyhow = "1.0"
+async-trait = "0.1"
+axum = { version = "0.7", features = ["macros"] }
+base64 = "0.22"
+dashmap = "6"
+ed25519-dalek = "2.1"
+hmac = "0.12"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+semver = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+sled = "0.34"
+subtle = "2"
+tempfile = "3"
+thiserror = "2"
+tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread", "sync", "time"] }
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.6", features = ["trace", "cors"] }
+tracing = "0.1"
+uuid = { version = "1.0", features = ["v4"] }

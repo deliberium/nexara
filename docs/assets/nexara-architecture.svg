@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">Nexara architecture</title>
+  <desc id="desc">A component architecture diagram showing host applications, models, Nexara runtime, core contracts, registry, remote tools, secrets, learning stores, server APIs, Qwen import, storage, and execution boundaries.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#36506f" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .zone { fill: #ffffff; stroke: #c8d4e3; stroke-width: 2; rx: 18; }
+      .zone-title { font: 700 20px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #123047; }
+      .zone-note { font: 500 13px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #51677f; }
+      .box { fill: #ffffff; stroke: #8aa2bf; stroke-width: 1.8; rx: 12; }
+      .box-core { fill: #eaf4ff; stroke: #4e85bd; }
+      .box-runtime { fill: #e8f7f0; stroke: #3d9970; }
+      .box-server { fill: #fff2df; stroke: #c9842f; }
+      .box-host { fill: #f0edff; stroke: #7d67c8; }
+      .box-store { fill: #f3f6f9; stroke: #8aa2bf; }
+      .label { font: 700 16px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #18334a; }
+      .small { font: 500 12.5px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #4f6174; }
+      .tiny { font: 600 11px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #617286; letter-spacing: .02em; }
+      .line { fill: none; stroke: #36506f; stroke-width: 2.2; marker-end: url(#arrow); }
+      .line-soft { fill: none; stroke: #6e839a; stroke-width: 1.8; marker-end: url(#arrow); stroke-dasharray: 5 5; }
+      .divider { stroke: #dbe4ee; stroke-width: 1.5; }
+      .badge { fill: #17324d; rx: 999; }
+      .badge-text { font: 700 11px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #ffffff; letter-spacing: .04em; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="760" />
+
+  <rect class="zone" x="42" y="58" width="256" height="562" />
+  <text class="zone-title" x="72" y="94">Host Application</text>
+  <text class="zone-note" x="72" y="118">identity, context, execution</text>
+
+  <rect class="zone" x="338" y="58" width="604" height="562" />
+  <text class="zone-title" x="368" y="94">Nexara Capability Plane</text>
+  <text class="zone-note" x="368" y="118">contracts, policy, brokered exposure, audit</text>
+
+  <rect class="zone" x="982" y="58" width="256" height="562" />
+  <text class="zone-title" x="1012" y="94">External Surfaces</text>
+  <text class="zone-note" x="1012" y="118">models, remotes, stores, APIs</text>
+
+  <rect class="box box-host" x="72" y="154" width="196" height="72" />
+  <text class="label" x="94" y="184">Host Adapter</text>
+  <text class="small" x="94" y="207">host, IDE, agent app</text>
+
+  <rect class="box box-host" x="72" y="258" width="196" height="72" />
+  <text class="label" x="94" y="288">Trust Resolver</text>
+  <text class="small" x="94" y="311">caller and surface policy</text>
+
+  <rect class="box box-host" x="72" y="362" width="196" height="72" />
+  <text class="label" x="94" y="392">Tool Executor</text>
+  <text class="small" x="94" y="415">final side effects stay here</text>
+
+  <rect class="box box-host" x="72" y="466" width="196" height="72" />
+  <text class="label" x="94" y="496">Built-in Catalog</text>
+  <text class="small" x="94" y="519">host-owned local tools</text>
+
+  <rect class="box box-core" x="386" y="150" width="220" height="82" />
+  <text class="label" x="414" y="181">nexara-core</text>
+  <text class="small" x="414" y="204">descriptors, broker, policy</text>
+  <text class="small" x="414" y="222">audit records, errors</text>
+
+  <rect class="box box-runtime" x="532" y="304" width="244" height="98" />
+  <text class="label" x="568" y="337">nexara-runtime</text>
+  <text class="small" x="568" y="360">selection, limits, confirmation</text>
+  <text class="small" x="568" y="378">trust and action enforcement</text>
+
+  <rect class="box" x="386" y="454" width="220" height="76" />
+  <text class="label" x="414" y="485">nexara-registry</text>
+  <text class="small" x="414" y="508">signed indexes and manifests</text>
+
+  <rect class="box" x="656" y="150" width="220" height="76" />
+  <text class="label" x="684" y="181">nexara-remote</text>
+  <text class="small" x="684" y="204">HTTP discovery and calls</text>
+
+  <rect class="box" x="656" y="454" width="220" height="76" />
+  <text class="label" x="684" y="485">nexara-secrets</text>
+  <text class="small" x="684" y="508">redacted sync/async stores</text>
+
+  <rect class="box" x="386" y="558" width="220" height="76" />
+  <text class="label" x="414" y="589">nexara-learning</text>
+  <text class="small" x="414" y="612">bounded ranking signals</text>
+
+  <rect class="box box-server" x="656" y="558" width="220" height="76" />
+  <text class="label" x="684" y="589">nexara-server</text>
+  <text class="small" x="684" y="612">auth, tools, admin APIs</text>
+
+  <rect class="box" x="532" y="246" width="244" height="44" />
+  <text class="tiny" x="559" y="273">FACADE: crates/nexara feature exports</text>
+
+  <rect class="box box-store" x="1012" y="150" width="196" height="72" />
+  <text class="label" x="1034" y="180">Models</text>
+  <text class="small" x="1034" y="203">brokered descriptors only</text>
+
+  <rect class="box box-store" x="1012" y="258" width="196" height="72" />
+  <text class="label" x="1034" y="288">Remote Tools</text>
+  <text class="small" x="1034" y="311">allowlisted endpoints</text>
+
+  <rect class="box box-store" x="1012" y="362" width="196" height="72" />
+  <text class="label" x="1034" y="392">Stores</text>
+  <text class="small" x="1034" y="415">memory, JSONL, sled, host</text>
+
+  <rect class="box box-store" x="1012" y="466" width="196" height="72" />
+  <text class="label" x="1034" y="496">Qwen MCP Config</text>
+  <text class="small" x="1034" y="519">imported as candidates</text>
+
+  <rect class="box box-store" x="1012" y="570" width="196" height="72" />
+  <text class="label" x="1034" y="600">HTTP Clients</text>
+  <text class="small" x="1034" y="623">tools and admin routes</text>
+
+  <line class="line" x1="268" y1="190" x2="386" y2="190" />
+  <line class="line" x1="268" y1="294" x2="532" y2="332" />
+  <line class="line" x1="532" y1="376" x2="268" y2="398" />
+  <line class="line" x1="268" y1="502" x2="532" y2="365" />
+
+  <line class="line" x1="606" y1="191" x2="656" y2="188" />
+  <line class="line" x1="496" y1="232" x2="600" y2="304" />
+  <line class="line" x1="496" y1="454" x2="590" y2="402" />
+  <line class="line" x1="766" y1="454" x2="710" y2="402" />
+  <line class="line" x1="496" y1="558" x2="590" y2="402" />
+  <line class="line" x1="766" y1="558" x2="708" y2="402" />
+
+  <line class="line" x1="776" y1="340" x2="1012" y2="186" />
+  <line class="line" x1="876" y1="188" x2="1012" y2="294" />
+  <line class="line" x1="876" y1="492" x2="1012" y2="398" />
+  <line class="line" x1="876" y1="596" x2="1012" y2="606" />
+  <line class="line-soft" x1="1012" y1="502" x2="876" y2="188" />
+  <line class="line-soft" x1="1012" y1="502" x2="496" y2="454" />
+
+  <line class="divider" x1="338" y1="650" x2="942" y2="650" />
+  <rect class="badge" x="386" y="672" width="158" height="28" />
+  <text class="badge-text" x="407" y="691">POLICY BOUNDARY</text>
+  <text class="small" x="562" y="691">learning, imports, registry metadata, and remotes cannot bypass runtime enforcement</text>
+</svg>

@@ -1,0 +1,18 @@
+[package]
+name = "nexara-learning"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Optional learned usage signal scoring for Nexara brokers"
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+nexara-core = { path = "../nexara-core", version = "0.1.0" }
+serde.workspace = true
+serde_json.workspace = true

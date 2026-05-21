@@ -1,0 +1,16 @@
+[package]
+name = "nexara-learning-memory"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "In-memory usage signal store for Nexara learning"
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+nexara-learning = { path = "../nexara-learning", version = "0.1.0" }
+

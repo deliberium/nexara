@@ -1,0 +1,23 @@
+[package]
+name = "nexara-learning-sled"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Sled usage signal store for Nexara learning"
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+nexara-learning = { path = "../nexara-learning", version = "0.1.0" }
+serde_json.workspace = true
+sled.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
