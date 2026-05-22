@@ -104,6 +104,10 @@ preflight() {
   run cargo fmt --manifest-path "$manifest_path" --all --check
   run cargo clippy --manifest-path "$manifest_path" --workspace --all-targets
   run cargo test --manifest-path "$manifest_path" --workspace
+  run cargo test --manifest-path "$manifest_path" -p nexara --all-features
+  if [[ -f "$repo_root/sdk/javascript/package.json" ]]; then
+    (cd "$repo_root/sdk/javascript" && run npm test)
+  fi
 }
 
 sdk_package() {
@@ -164,6 +168,10 @@ release_candidate() {
   run cargo fmt --manifest-path "$manifest_path" --all --check
   run cargo clippy --manifest-path "$manifest_path" --workspace --all-targets
   run cargo test --manifest-path "$manifest_path" --workspace -- --test-threads=1
+  run cargo test --manifest-path "$manifest_path" -p nexara --all-features
+  if [[ -f "$repo_root/sdk/javascript/package.json" ]]; then
+    (cd "$repo_root/sdk/javascript" && run npm test)
+  fi
   sdk_package
   require_release_files
   run grep -Fq 'host_requirements' "$repo_root/README.md"

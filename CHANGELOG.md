@@ -9,8 +9,7 @@ and this project follows semantic versioning once public releases begin.
 
 ### Added
 
-- Release checklist for package verification and downstream host adapter validation.
-- Public documentation pass for architecture, deployment, release validation, skill manifests, remote protocol, and threat model.
+- None yet.
 
 ### Changed
 
@@ -42,7 +41,10 @@ and this project follows semantic versioning once public releases begin.
 - Secret redaction semantics so secret values do not implement debug-style exposure.
 - Policy boundaries for action class, trust tier, confirmation, payload size, concurrency, and host allowlists.
 - Signed-index fixture matrix covering valid, tampered, unsupported-host, missing-secret, and confirmation-required flows.
+- Expanded Rust and JavaScript validation for remote clients, server routes, registry sources, runtime policy, facade feature exports, and SDK request behavior.
 - Threat-model documentation covering signed registries, remote tools, secrets, audit, and learned usage signals.
+- Release checklist for package verification and downstream host adapter validation.
+- Public documentation pass for architecture, deployment, release validation, skill manifests, remote protocol, and threat model.
 
 [Unreleased]: https://github.com/deliberium/nexara/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/deliberium/nexara/releases/tag/v0.1.0
