@@ -13,12 +13,17 @@
   </a>
 </p>
 
-Nexara is a policy-bound capability runtime for AI systems. It gives hosts a
-neutral way to discover, rank, expose, call, audit, and administer tools without
-letting model prompts, remote registries, or individual integrations become the
-security boundary.
+Nexara is the capability layer for AI products that need to use real tools
+without turning every integration into a security project. It gives agents and
+assistants a signed, policy-aware way to discover skills, rank the right tool,
+request secrets, call remote capabilities, and leave behind an audit trail that
+hosts can actually trust.
 
-Nexara is designed for applications that need:
+Use Nexara when your AI system is ready to move beyond hard-coded tool lists,
+but you still need crisp boundaries around what can be installed, exposed, and
+executed.
+
+## What It Provides
 
 - signed skill registries and installable capability packs
 - product-neutral `host_requirements` instead of app-specific compatibility fields
