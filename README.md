@@ -1,6 +1,10 @@
 # Nexara
 
 <p align="center">
+  <img src="resources/nexaraLogo.png" alt="Nexara logo" width="240">
+</p>
+
+<p align="center">
   <a href="https://github.com/deliberium/nexara/actions/workflows/ci.yml?query=branch%3Amaster">
     <img src="https://github.com/deliberium/nexara/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI">
   </a>
