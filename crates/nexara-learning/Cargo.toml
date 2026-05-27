@@ -13,6 +13,6 @@ categories.workspace = true
 
 [dependencies]
 anyhow.workspace = true
-nexara-core = { path = "../nexara-core", version = "0.1.0" }
+nexara-core = { path = "../nexara-core", version = "0.1.1" }
 serde.workspace = true
 serde_json.workspace = true

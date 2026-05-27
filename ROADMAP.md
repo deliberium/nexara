@@ -25,6 +25,24 @@ needs can change the order.
 - Add packaging dry-run workflow once crate publication order is finalized.
 - Expand conformance fixtures for additional host requirement and registry cache edge cases.
 - Add richer examples for custom auth, KMS-backed secrets, and multi-user learned signals.
+- Add opt-in `nexara-policy` for deterministic one-line policy authoring: plain intent such as `reads orders, never refunds` compiles into inspectable policy contracts.
+- Add semantic capability/effect metadata to descriptors and manifests so policy contracts can distinguish resource operations such as `orders.read` and `orders.refunds.create`.
+- Add catalog simulation and runtime policy explanations for allow, deny, confirmation, and missing-capability decisions.
+- Add signed policy contracts for enterprise review workflows.
+- Add `nexara-cli` with policy compile, simulate, explain, sign, and verify commands.
+- Add the `policy-shop` demo and update the Nexara website with an interactive one-line policy demo.
+
+### Policy Authoring Non-Goals For The First Implementation
+
+The first policy-authoring implementation is intentionally narrow so the core
+loop stays demoable, inspectable, and enforceable. These are not in scope:
+
+- Free-form LLM policy authoring.
+- Legal/compliance policy generation.
+- Cross-language policy SDKs beyond stable JSON output.
+- Full ABAC/RBAC engine.
+- Full UI policy editor in the Rust repository.
+- Automatic trust of remote server capability labels without signed registry or host review.
 
 ## v0.2
 
@@ -34,10 +52,10 @@ needs can change the order.
 - WASM component runtime exploration behind strict policy gates.
 - MCP HTTP and stdio transport import where host sandboxing can be explicit.
 - Benchmarks for broker selection, registry load, HTTP roundtrip, and learned signal storage.
+- Policy contract simulation attestations for teams that want to sign both the contract and reviewed catalog simulation output.
 
 ## Later
 
 - Local process sandboxing patterns for hosts that want managed execution.
 - Multi-tenant server profiles and tenant-scoped admin APIs.
-- Policy simulation tools for registry review.
 - Optional UI components for human approval and skill readiness flows.

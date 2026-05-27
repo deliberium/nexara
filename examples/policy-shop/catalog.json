@@ -1,0 +1,7 @@
+[
+  { "tool": "shopify.get_order", "capability": "orders.read" },
+  { "tool": "shopify.search_orders", "capability": "orders.search" },
+  { "tool": "shopify.create_refund", "capability": "orders.refunds.create" },
+  { "tool": "shopify.cancel_order", "capability": "orders.cancel" },
+  { "tool": "shopify.export_orders", "capability": "orders.export" }
+]

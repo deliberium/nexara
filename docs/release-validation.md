@@ -31,12 +31,14 @@ cargo test -p nexara-registry
 cargo test -p nexara-secrets
 cargo test -p nexara-remote
 cargo test -p nexara-runtime
+cargo test -p nexara-policy
 cargo test -p nexara-learning
 cargo test -p nexara-learning-memory
 cargo test -p nexara-learning-jsonl
 cargo test -p nexara-learning-sled
 cargo test -p nexara-compat-qwen
 cargo test -p nexara-server
+cargo test -p nexara-cli
 ```
 
 ## Packaging Dry Run
@@ -56,16 +58,18 @@ The script packages and publishes crates in dependency order:
 3. `nexara-registry`
 4. `nexara-remote`
 5. `nexara-runtime`
-6. `nexara-learning`
-7. `nexara-learning-memory`
-8. `nexara-learning-jsonl`
-9. `nexara-learning-sled`
-10. `nexara-compat-qwen`
-11. `nexara-server`
-12. `nexara`
+6. `nexara-policy`
+7. `nexara-learning`
+8. `nexara-learning-memory`
+9. `nexara-learning-jsonl`
+10. `nexara-learning-sled`
+11. `nexara-compat-qwen`
+12. `nexara-server`
+13. `nexara-cli`
+14. `nexara`
 
-For staged checks, use `foundation`, `contracts`, `learning`, `compat`,
-`server`, and `facade`.
+For staged checks, use `foundation`, `contracts`, `policy`, `learning`,
+`compat`, `server`, and `facade`.
 
 ## Release Candidate
 

@@ -19,6 +19,28 @@ and this project follows semantic versioning once public releases begin.
 
 - None yet.
 
+## [0.1.1] - 2026-05-27
+
+### Added
+
+- Opt-in `nexara-policy` crate for deterministic one-line policy authoring.
+- Inspectable `PolicyContract` rules, selectors, diagnostics, evaluations, and matched-rule metadata in `nexara-core`.
+- Semantic tool capability and effect metadata for policy-level resource/action enforcement.
+- Runtime policy contract enforcement with deny-by-default behavior for tools missing semantic capability metadata.
+- Signed policy contract helpers for enterprise review workflows.
+- `nexara-cli` crate with policy compile, simulate, explain, sign, and verify commands.
+- `policy-shop` demo for `reads orders, never refunds`.
+- Policy authoring documentation and threat-model coverage.
+
+### Changed
+
+- Updated release packaging and publish-order validation for the new policy and CLI crates.
+- Updated Nexara website and architecture diagrams to show one-line policy authoring and runtime enforcement.
+
+### Fixed
+
+- Runtime policy denials now emit audit records with matched-rule policy context.
+
 ## [0.1.0] - 2026-05-22
 
 ### Added
@@ -46,5 +68,6 @@ and this project follows semantic versioning once public releases begin.
 - Release checklist for package verification and downstream host adapter validation.
 - Public documentation pass for architecture, deployment, release validation, skill manifests, remote protocol, and threat model.
 
-[Unreleased]: https://github.com/deliberium/nexara/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/deliberium/nexara/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/deliberium/nexara/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/deliberium/nexara/releases/tag/v0.1.0

@@ -14,6 +14,14 @@ signals.
 classes, trust tiers, broker requests, call requests, call results, registry
 lookups, validation helpers, audit records, and shared errors.
 
+It also defines inspectable policy contracts, semantic capability/effect
+metadata, policy rule selectors, matched-rule explanations, and the evaluation
+decisions used by runtime audit.
+
+`nexara-policy` is opt-in. It compiles one-line human policy intent into
+`PolicyContract` values, simulates contracts against a catalog, and supports
+signed policy contract verification for enterprise review workflows.
+
 `nexara-registry` owns signed skill indexes, product-neutral manifests,
 `host_requirements`, signature verification, manifest hash validation, and
 installed-skill storage contracts.
@@ -47,6 +55,8 @@ or registry records without enabling those tools outside host policy.
 3. The broker filters and ranks enabled descriptors.
 4. A tool call arrives as a typed `ToolCallRequest`.
 5. Runtime checks payload size, action class, scope, trust tier, confirmation,
-   concurrency, and host allowlist where relevant.
+   active policy contracts, semantic capability metadata, concurrency, and host
+   allowlist where relevant.
 6. Runtime delegates execution to the host executor or remote executor.
-7. Runtime emits an audit record with outcome, duration, and result hash.
+7. Runtime emits an audit record with outcome, duration, result hash, matched
+   policy rule IDs, and policy explanation metadata.

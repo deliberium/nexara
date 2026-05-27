@@ -1,4 +1,4 @@
-use nexara_core::ActionClass;
+use nexara_core::{ActionClass, CapabilitySensitivity, ToolEffect};
 use semver::{Version, VersionReq};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
@@ -58,8 +58,24 @@ pub struct SkillSource {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Default)]
 pub struct SkillCapabilityDescriptor {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     pub name: String,
     pub description: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource: Option<String>,
+    #[serde(default)]
+    pub resource_path: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub operation: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub action_class: Option<ActionClass>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sensitivity: Option<CapabilitySensitivity>,
+    #[serde(default)]
+    pub aliases: Vec<String>,
     #[serde(default)]
     pub parameters: BTreeMap<String, String>,
     #[serde(default)]
@@ -106,6 +122,8 @@ pub struct SkillMetadata {
     pub presentation: SkillPresentation,
     #[serde(default)]
     pub capabilities: Vec<SkillCapabilityDescriptor>,
+    #[serde(default)]
+    pub effects: Vec<ToolEffect>,
 }
 
 pub type SkillManifest = SkillMetadata;
@@ -126,6 +144,8 @@ struct RawSkillManifest {
     presentation: SkillPresentation,
     #[serde(default)]
     capabilities: Vec<SkillCapabilityDescriptor>,
+    #[serde(default)]
+    effects: Vec<ToolEffect>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -208,6 +228,7 @@ pub fn parse_skill_manifest_str(input: &str) -> anyhow::Result<SkillMetadata> {
         source: raw.source,
         presentation: raw.presentation,
         capabilities: raw.capabilities,
+        effects: raw.effects,
     })
 }
 

@@ -23,9 +23,25 @@ Use Nexara when your AI system is ready to move beyond hard-coded tool lists,
 but you still need crisp boundaries around what can be installed, exposed, and
 executed.
 
+## One-Line Policies
+
+Nexara can compile plain policy intent into inspectable runtime contracts:
+
+```text
+reads orders, never refunds
+```
+
+That sentence becomes explicit allow, deny, and confirmation rules over semantic
+capabilities such as `orders.read`, `orders.search`, `orders.export`, and
+`orders.refunds.create`. Hosts can simulate the contract against a catalog before
+shipping it, require signed policy contracts for enterprise review, and receive
+runtime audit explanations when calls are allowed, denied, or confirmation-gated.
+
 ## What It Provides
 
 - signed skill registries and installable capability packs
+- one-line policy authoring through opt-in `nexara-policy`
+- inspectable and signable policy contracts
 - product-neutral `host_requirements` instead of app-specific compatibility fields
 - remote tool discovery and execution contracts
 - bounded tool selection for model prompts
@@ -48,6 +64,8 @@ visible to the model, enforces policy before calls, and emits audit records.
 
 - `crates/nexara`: facade crate and feature bundle
 - `crates/nexara-core`: core tool descriptors, broker, registry, policy, audit, validation, and errors
+- `crates/nexara-policy`: deterministic one-line policy compiler, catalog simulator, and signed policy contract helpers
+- `crates/nexara-cli`: command-line policy compile, simulate, sign, and verify tools
 - `crates/nexara-registry`: signed skill indexes, manifests, installed-skill stores, and file/HTTP sources
 - `crates/nexara-secrets`: sync and async secret-store traits, redacted values, memory and encrypted-file stores
 - `crates/nexara-remote`: remote endpoint contracts, allowlists, auth providers, diagnostics, and HTTP client helpers
@@ -58,6 +76,7 @@ visible to the model, enforces policy before calls, and emits audit records.
 - `crates/nexara-learning-sled`: embedded durable usage-signal store
 - `crates/nexara-compat-qwen`: Qwen-family prompt profile detection and MCP config import
 - `crates/nexara-server`: authenticated HTTP service and admin skill install/list APIs
+- `examples/policy-shop`: runnable one-line policy demo for `reads orders, never refunds`
 - `sdk/javascript`: small JavaScript client for list/call flows
 - `docs`: architecture, deployment, manifest, remote protocol, threat model, and release validation
 - `docs/qwen-compatibility.md`: Qwen MCP import and approval-store mapping
@@ -84,6 +103,7 @@ Available facade features:
 - `learning-sled`
 - `compat-qwen`
 - `server`
+- `policy`
 - `all`
 
 ## Quick Start
@@ -180,6 +200,7 @@ For release preparation, see [docs/release-validation.md](docs/release-validatio
 
 ## Project Status
 
-Nexara `0.1.0` is the first public library surface. The standalone crates,
-contracts, docs, examples, and tests are in place for hosts to embed the runtime
-or run the authenticated HTTP server.
+Nexara `0.1.0` was the first public library surface. The `0.1.1` line adds the
+opt-in one-line policy authoring layer while keeping the standalone crates,
+contracts, docs, examples, and tests ready for hosts to embed the runtime or run
+the authenticated HTTP server.

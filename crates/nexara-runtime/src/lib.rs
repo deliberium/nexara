@@ -1,8 +1,9 @@
 use async_trait::async_trait;
 use nexara_core::{
     ActionClass, AuditOutcome, AuditRecord, AuditSink, EffectiveTrustPolicy, NexaraError,
-    PolicyDecision, ToolBroker, ToolCallRequest, ToolCallResult, ToolDescriptor, ToolRegistry,
-    ToolSelectionRequest, ToolUsageSignalProvider, TracingAuditSink, TrustProfile, hash_result,
+    PolicyContract, PolicyDecision, PolicyEvaluation, PolicyEvaluationDecision, ToolBroker,
+    ToolCallRequest, ToolCallResult, ToolDescriptor, ToolRegistry, ToolSelectionRequest,
+    ToolUsageSignalProvider, TracingAuditSink, TrustProfile, hash_result, matched_rules_metadata,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -138,6 +139,7 @@ pub struct NexaraRuntime<C> {
     audit_sink: Arc<dyn AuditSink>,
     lifecycle_hooks: Arc<dyn RuntimeLifecycleHooks<C>>,
     broker: ToolBroker,
+    policy_contract: Option<PolicyContract>,
     call_semaphore: Arc<Semaphore>,
 }
 
@@ -160,6 +162,7 @@ where
             audit_sink: Arc::new(TracingAuditSink),
             lifecycle_hooks: Arc::new(NoopRuntimeLifecycleHooks),
             broker: ToolBroker::new(),
+            policy_contract: None,
             call_semaphore: Arc::new(Semaphore::new(max_concurrent_calls)),
         }
     }
@@ -188,6 +191,21 @@ where
     pub fn with_lifecycle_hooks(mut self, hooks: Arc<dyn RuntimeLifecycleHooks<C>>) -> Self {
         self.lifecycle_hooks = hooks;
         self
+    }
+
+    pub fn with_policy_contract(mut self, policy_contract: PolicyContract) -> Self {
+        self.policy_contract = Some(policy_contract);
+        self
+    }
+
+    pub fn with_verified_policy_contract(
+        mut self,
+        policy_contract: PolicyContract,
+        verifier: impl FnOnce(&PolicyContract) -> Result<(), NexaraError>,
+    ) -> Result<Self, NexaraError> {
+        verifier(&policy_contract)?;
+        self.policy_contract = Some(policy_contract);
+        Ok(self)
     }
 
     pub fn registry(&self) -> ToolRegistry {
@@ -237,6 +255,27 @@ where
             .cloned()
             .ok_or(NexaraError::ToolNotFound)?;
         let policy = self.trust_resolver.resolve(&context);
+        let policy_evaluation = self.evaluate_policy_contract(&tool, &request);
+        if let Some(evaluation) = &policy_evaluation
+            && let Some(error) = policy_error_for_evaluation(evaluation)
+        {
+            let mut record = AuditRecord::now(
+                "unknown",
+                tool.name.clone(),
+                policy_decision_for_evaluation(evaluation),
+                AuditOutcome::Rejected,
+            );
+            record.duration_ms = started.elapsed().as_millis() as u64;
+            record
+                .metadata
+                .extend(matched_rules_metadata(&evaluation.matched_rules));
+            record.metadata.insert(
+                "policy.explanation".to_string(),
+                evaluation.explanation.clone(),
+            );
+            let _ = self.audit_sink.record(record);
+            return Err(error);
+        }
         self.enforce_policy(&tool, &mut request, &policy)?;
         let permit = self
             .call_semaphore
@@ -262,6 +301,15 @@ where
         let mut record = AuditRecord::now("unknown", tool.name.clone(), decision, outcome);
         record.duration_ms = started.elapsed().as_millis() as u64;
         record.result_hash = hash;
+        if let Some(policy_evaluation) = policy_evaluation {
+            record
+                .metadata
+                .extend(matched_rules_metadata(&policy_evaluation.matched_rules));
+            record.metadata.insert(
+                "policy.explanation".to_string(),
+                policy_evaluation.explanation,
+            );
+        }
         let _ = self.audit_sink.record(record);
         self.lifecycle_hooks
             .after_call(&tool, &request, result.as_ref(), &context)
@@ -302,6 +350,50 @@ where
                 NexaraError::ConfirmationRequired("execute tool requires confirmation".to_string()),
             ),
             ActionClass::Execute => Ok(()),
+        }
+    }
+
+    fn evaluate_policy_contract(
+        &self,
+        tool: &ToolDescriptor,
+        request: &ToolCallRequest,
+    ) -> Option<PolicyEvaluation> {
+        let Some(contract) = &self.policy_contract else {
+            return None;
+        };
+        let confirmed = request
+            .params
+            .get("_confirmed")
+            .and_then(|value| value.as_bool())
+            .unwrap_or(false);
+        Some(contract.evaluate_tool(tool, confirmed))
+    }
+}
+
+fn policy_error_for_evaluation(evaluation: &PolicyEvaluation) -> Option<NexaraError> {
+    match evaluation.decision {
+        PolicyEvaluationDecision::Allowed => None,
+        PolicyEvaluationDecision::ConfirmationRequired => Some(NexaraError::ConfirmationRequired(
+            evaluation.explanation.clone(),
+        )),
+        PolicyEvaluationDecision::Denied
+        | PolicyEvaluationDecision::NoMatchingAllow
+        | PolicyEvaluationDecision::DescriptorMissingCapabilities => Some(
+            NexaraError::TrustPolicyDenied(evaluation.explanation.clone()),
+        ),
+    }
+}
+
+fn policy_decision_for_evaluation(evaluation: &PolicyEvaluation) -> PolicyDecision {
+    match evaluation.decision {
+        PolicyEvaluationDecision::Allowed => PolicyDecision::Allowed,
+        PolicyEvaluationDecision::Denied => PolicyDecision::DeniedPolicyContract,
+        PolicyEvaluationDecision::NoMatchingAllow => PolicyDecision::DeniedNoMatchingAllow,
+        PolicyEvaluationDecision::DescriptorMissingCapabilities => {
+            PolicyDecision::DeniedMissingCapabilities
+        }
+        PolicyEvaluationDecision::ConfirmationRequired => {
+            PolicyDecision::DeniedPolicyConfirmationRequired
         }
     }
 }

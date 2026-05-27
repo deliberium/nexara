@@ -25,8 +25,8 @@ maps to:
 - `QwenImportRecord.endpoint.base_url = "https://tools.example.com/mcp"`
 - `QwenImportRecord.approved = false` unless a `QwenApprovalStore` says otherwise
 
-Command/process transports are rejected in Nexara `0.1.0`; hosts that want local
-process execution need an explicit sandboxing design outside Qwen import.
+Command/process transports are rejected by Nexara; hosts that want local process
+execution need an explicit sandboxing design outside Qwen import.
 
 ## Approval Storage
 

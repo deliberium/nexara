@@ -1,7 +1,9 @@
 use async_trait::async_trait;
 use nexara_core::{
-    ActionClass, AuditRecord, AuditSink, NexaraError, PolicyDecision, ToolCallRequest,
-    ToolCallResult, ToolDescriptor, TrustProfile, TrustTier,
+    ActionClass, AuditRecord, AuditSink, CapabilityPattern, CapabilitySensitivity, NexaraError,
+    PolicyContract, PolicyDecision, PolicyDefaults, PolicyEffect, PolicyRule, PolicySelector,
+    PolicySource, PolicySourceKind, ToolCallRequest, ToolCallResult, ToolDescriptor, TrustProfile,
+    TrustTier,
 };
 use nexara_runtime::{
     HostToolExecutor, NexaraRuntime, NexaraRuntimeConfig, RuntimeLifecycleHooks, StaticToolCatalog,
@@ -111,6 +113,70 @@ fn descriptor(action_class: ActionClass) -> ToolDescriptor {
         enabled: true,
         input_schema: None,
         guidance: None,
+        capabilities: Vec::new(),
+        effects: Vec::new(),
+    }
+}
+
+fn semantic_descriptor(
+    name: &str,
+    capability_id: &str,
+    resource_path: &[&str],
+    operation: &str,
+    action_class: ActionClass,
+) -> ToolDescriptor {
+    let mut descriptor = descriptor(action_class);
+    descriptor.name = name.to_string();
+    descriptor.capabilities = vec![nexara_core::ToolCapability {
+        id: capability_id.to_string(),
+        display_name: Some(format!("{operation} {}", resource_path.join(" "))),
+        description: Some(format!("Capability {capability_id}")),
+        resource: resource_path[0].to_string(),
+        resource_path: resource_path
+            .iter()
+            .map(|part| (*part).to_string())
+            .collect(),
+        operation: operation.to_string(),
+        action_class,
+        sensitivity: CapabilitySensitivity::Business,
+        aliases: Vec::new(),
+    }];
+    descriptor
+}
+
+fn orders_policy() -> PolicyContract {
+    PolicyContract {
+        id: "orders-never-refunds".to_string(),
+        version: "0.1.0".to_string(),
+        source: PolicySource {
+            kind: PolicySourceKind::OneLine,
+            text: "reads orders, never refunds".to_string(),
+        },
+        rules: vec![
+            PolicyRule {
+                id: "allow-orders-read".to_string(),
+                effect: PolicyEffect::Allow,
+                selector: PolicySelector {
+                    capabilities: vec![CapabilityPattern("orders.read".to_string())],
+                    ..PolicySelector::default()
+                },
+                condition: None,
+                reason: "reads orders".to_string(),
+            },
+            PolicyRule {
+                id: "deny-refunds".to_string(),
+                effect: PolicyEffect::Deny,
+                selector: PolicySelector {
+                    capabilities: vec![CapabilityPattern("orders.refunds.create".to_string())],
+                    ..PolicySelector::default()
+                },
+                condition: None,
+                reason: "never refunds".to_string(),
+            },
+        ],
+        defaults: PolicyDefaults::default(),
+        diagnostics: Vec::new(),
+        created_at: None,
     }
 }
 
@@ -133,6 +199,150 @@ async fn read_call_succeeds() {
         .await
         .unwrap();
     assert_eq!(result.result["echo"]["hello"], "world");
+}
+
+#[tokio::test]
+async fn policy_contract_allows_matching_read_capability() {
+    let runtime = NexaraRuntime::new(
+        NexaraRuntimeConfig::default(),
+        Arc::new(StaticToolCatalog::new(vec![semantic_descriptor(
+            "shopify.get_order",
+            "orders.read",
+            &["orders"],
+            "read",
+            ActionClass::Read,
+        )])),
+        Arc::new(EchoExecutor),
+        Arc::new(StaticTrustPolicyResolver::new(TrustProfile::Observe)),
+    )
+    .with_policy_contract(orders_policy());
+
+    let result = runtime
+        .call_tool(
+            ToolCallRequest {
+                tool: "shopify.get_order".to_string(),
+                params: json!({ "order_id": "1001" }),
+            },
+            Ctx,
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(result.result["echo"]["order_id"], "1001");
+}
+
+#[tokio::test]
+async fn policy_contract_denies_refund_capability() {
+    let audit = Arc::new(RecordingAuditSink::default());
+    let runtime = NexaraRuntime::new(
+        NexaraRuntimeConfig::default(),
+        Arc::new(StaticToolCatalog::new(vec![semantic_descriptor(
+            "shopify.create_refund",
+            "orders.refunds.create",
+            &["orders", "refunds"],
+            "create",
+            ActionClass::Write,
+        )])),
+        Arc::new(EchoExecutor),
+        Arc::new(StaticTrustPolicyResolver::new(TrustProfile::FullOperator)),
+    )
+    .with_audit_sink(audit.clone())
+    .with_policy_contract(orders_policy());
+
+    let err = runtime
+        .call_tool(
+            ToolCallRequest {
+                tool: "shopify.create_refund".to_string(),
+                params: json!({ "_confirmed": true }),
+            },
+            Ctx,
+        )
+        .await
+        .unwrap_err();
+
+    assert!(
+        matches!(err, NexaraError::TrustPolicyDenied(message) if message.contains("never refunds"))
+    );
+
+    let records = audit.records.lock().unwrap();
+    assert_eq!(records.len(), 1);
+    assert_eq!(records[0].tool, "shopify.create_refund");
+    assert_eq!(
+        records[0].policy_decision,
+        PolicyDecision::DeniedPolicyContract
+    );
+    assert_eq!(records[0].outcome, nexara_core::AuditOutcome::Rejected);
+    assert_eq!(
+        records[0].metadata.get("policy.matched_rules"),
+        Some(&"deny-refunds".to_string())
+    );
+    assert!(
+        records[0]
+            .metadata
+            .get("policy.explanation")
+            .is_some_and(|message| message.contains("never refunds"))
+    );
+}
+
+#[tokio::test]
+async fn policy_contract_denies_missing_semantic_capabilities() {
+    let runtime = NexaraRuntime::new(
+        NexaraRuntimeConfig::default(),
+        Arc::new(StaticToolCatalog::new(vec![descriptor(ActionClass::Read)])),
+        Arc::new(EchoExecutor),
+        Arc::new(StaticTrustPolicyResolver::new(TrustProfile::Observe)),
+    )
+    .with_policy_contract(orders_policy());
+
+    let err = runtime
+        .call_tool(
+            ToolCallRequest {
+                tool: "echo".to_string(),
+                params: json!({}),
+            },
+            Ctx,
+        )
+        .await
+        .unwrap_err();
+
+    assert!(
+        matches!(err, NexaraError::TrustPolicyDenied(message) if message.contains("semantic capability"))
+    );
+}
+
+#[tokio::test]
+async fn verified_policy_contract_runs_host_verifier_before_activation() {
+    let runtime = NexaraRuntime::new(
+        NexaraRuntimeConfig::default(),
+        Arc::new(StaticToolCatalog::new(vec![semantic_descriptor(
+            "shopify.get_order",
+            "orders.read",
+            &["orders"],
+            "read",
+            ActionClass::Read,
+        )])),
+        Arc::new(EchoExecutor),
+        Arc::new(StaticTrustPolicyResolver::new(TrustProfile::Observe)),
+    )
+    .with_verified_policy_contract(orders_policy(), |contract| {
+        if contract.id == "orders-never-refunds" {
+            Ok(())
+        } else {
+            Err(NexaraError::TrustPolicyDenied("bad policy".to_string()))
+        }
+    })
+    .unwrap();
+
+    runtime
+        .call_tool(
+            ToolCallRequest {
+                tool: "shopify.get_order".to_string(),
+                params: json!({}),
+            },
+            Ctx,
+        )
+        .await
+        .unwrap();
 }
 
 #[tokio::test]

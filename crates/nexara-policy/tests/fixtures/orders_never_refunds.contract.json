@@ -1,0 +1,65 @@
+{
+  "id": "policy-reads-orders-never-refunds",
+  "version": "0.1.0",
+  "source": {
+    "kind": "one_line",
+    "text": "reads orders, never refunds"
+  },
+  "rules": [
+    {
+      "id": "allow-orders-read",
+      "effect": "allow",
+      "selector": {
+        "capabilities": [
+          "orders.read",
+          "orders.search"
+        ],
+        "resources": [],
+        "actions": [],
+        "tools": [],
+        "scopes": [],
+        "trust_tiers": [],
+        "action_classes": []
+      },
+      "reason": "reads orders"
+    },
+    {
+      "id": "confirm-orders-export",
+      "effect": "require_confirmation",
+      "selector": {
+        "capabilities": [
+          "orders.export"
+        ],
+        "resources": [],
+        "actions": [],
+        "tools": [],
+        "scopes": [],
+        "trust_tiers": [],
+        "action_classes": []
+      },
+      "reason": "exporting orders should be reviewed"
+    },
+    {
+      "id": "deny-refunds-create",
+      "effect": "deny",
+      "selector": {
+        "capabilities": [
+          "refunds.create",
+          "orders.refunds.create"
+        ],
+        "resources": [],
+        "actions": [],
+        "tools": [],
+        "scopes": [],
+        "trust_tiers": [],
+        "action_classes": []
+      },
+      "reason": "never refunds"
+    }
+  ],
+  "defaults": {
+    "deny_by_default": true,
+    "deny_missing_capabilities": true
+  },
+  "diagnostics": []
+}

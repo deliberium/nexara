@@ -27,6 +27,48 @@ pub struct ToolDescriptor {
     pub input_schema: Option<Value>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub guidance: Option<ToolGuidance>,
+    #[serde(default)]
+    pub capabilities: Vec<ToolCapability>,
+    #[serde(default)]
+    pub effects: Vec<ToolEffect>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ToolCapability {
+    pub id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    pub resource: String,
+    #[serde(default)]
+    pub resource_path: Vec<String>,
+    pub operation: String,
+    pub action_class: ActionClass,
+    pub sensitivity: CapabilitySensitivity,
+    #[serde(default)]
+    pub aliases: Vec<String>,
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum CapabilitySensitivity {
+    Public,
+    Internal,
+    Business,
+    Personal,
+    Financial,
+    Secret,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ToolEffect {
+    pub resource: String,
+    pub operation: String,
+    pub writes: bool,
+    pub external_side_effect: bool,
+    pub financial_side_effect: bool,
+    pub irreversible: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -73,6 +115,37 @@ impl ToolDescriptor {
             enabled: true,
             input_schema: None,
             guidance: None,
+            capabilities: Vec::new(),
+            effects: Vec::new(),
+        }
+    }
+
+    pub fn with_capability(mut self, capability: ToolCapability) -> Self {
+        self.capabilities.push(capability);
+        self
+    }
+}
+
+impl ToolCapability {
+    pub fn new(
+        id: impl Into<String>,
+        resource: impl Into<String>,
+        operation: impl Into<String>,
+        action_class: ActionClass,
+    ) -> Self {
+        let id = id.into();
+        let resource = resource.into();
+        let operation = operation.into();
+        Self {
+            id,
+            display_name: None,
+            description: None,
+            resource_path: vec![resource.clone()],
+            resource,
+            operation,
+            action_class,
+            sensitivity: CapabilitySensitivity::Internal,
+            aliases: Vec::new(),
         }
     }
 }

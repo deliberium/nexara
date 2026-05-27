@@ -13,6 +13,8 @@ fn descriptor(name: &str, tags: &[&str]) -> ToolDescriptor {
         enabled: true,
         input_schema: None,
         guidance: None,
+        capabilities: Vec::new(),
+        effects: Vec::new(),
     }
 }
 

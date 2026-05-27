@@ -6,22 +6,25 @@ members = [
     "crates/nexara-secrets",
     "crates/nexara-remote",
     "crates/nexara-runtime",
+    "crates/nexara-policy",
     "crates/nexara-learning",
     "crates/nexara-learning-memory",
     "crates/nexara-learning-jsonl",
     "crates/nexara-learning-sled",
     "crates/nexara-compat-qwen",
     "crates/nexara-server",
+    "crates/nexara-cli",
     "examples/custom-remote-discovery",
     "examples/custom-skill-index",
     "examples/embedded-basic",
     "examples/learning-signals",
     "examples/local-http-server",
+    "examples/policy-shop",
 ]
 resolver = "3"
 
 [workspace.package]
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 rust-version = "1.85"
 license = "MIT"

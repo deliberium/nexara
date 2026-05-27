@@ -17,12 +17,14 @@ publish_order=(
   nexara-registry
   nexara-remote
   nexara-runtime
+  nexara-policy
   nexara-learning
   nexara-learning-memory
   nexara-learning-jsonl
   nexara-learning-sled
   nexara-compat-qwen
   nexara-server
+  nexara-cli
   nexara
 )
 
@@ -45,6 +47,7 @@ Phases:
   foundation        Package crates with no Nexara crate dependencies.
   contracts         Package core contracts and runtime-adjacent crates.
   learning          Package learned-usage storage crates.
+  policy            Package policy authoring and CLI crates.
   compat            Package compatibility import crates.
   server            Package nexara-server.
   facade            Package the nexara facade crate.
@@ -177,7 +180,7 @@ release_candidate() {
   run grep -Fq 'host_requirements' "$repo_root/README.md"
   run grep -Fq 'host_requirements' "$repo_root/docs/skill-manifest-spec.md"
   run grep -Fq 'nexara-architecture.svg' "$repo_root/README.md"
-  run grep -Fq '[0.1.0]' "$repo_root/CHANGELOG.md"
+  run grep -Fq '[0.1.1]' "$repo_root/CHANGELOG.md"
 }
 
 security() {
@@ -214,6 +217,9 @@ crate_manifest_path() {
     nexara-runtime)
       printf '%s\n' "$repo_root/crates/nexara-runtime/Cargo.toml"
       ;;
+    nexara-policy)
+      printf '%s\n' "$repo_root/crates/nexara-policy/Cargo.toml"
+      ;;
     nexara-learning)
       printf '%s\n' "$repo_root/crates/nexara-learning/Cargo.toml"
       ;;
@@ -231,6 +237,9 @@ crate_manifest_path() {
       ;;
     nexara-server)
       printf '%s\n' "$repo_root/crates/nexara-server/Cargo.toml"
+      ;;
+    nexara-cli)
+      printf '%s\n' "$repo_root/crates/nexara-cli/Cargo.toml"
       ;;
     nexara)
       printf '%s\n' "$repo_root/crates/nexara/Cargo.toml"
@@ -260,6 +269,9 @@ publish_targets() {
     contracts)
       printf '%s\n' nexara-registry nexara-remote nexara-runtime nexara-learning
       ;;
+    policy)
+      printf '%s\n' nexara-policy nexara-cli
+      ;;
     learning)
       printf '%s\n' nexara-learning-memory nexara-learning-jsonl nexara-learning-sled
       ;;
@@ -275,12 +287,12 @@ publish_targets() {
     all)
       printf '%s\n' "${publish_order[@]}"
       ;;
-    nexara-core|nexara-secrets|nexara-registry|nexara-remote|nexara-runtime|nexara-learning|nexara-learning-memory|nexara-learning-jsonl|nexara-learning-sled|nexara-compat-qwen|nexara-server|nexara)
+    nexara-core|nexara-secrets|nexara-registry|nexara-remote|nexara-runtime|nexara-policy|nexara-learning|nexara-learning-memory|nexara-learning-jsonl|nexara-learning-sled|nexara-compat-qwen|nexara-server|nexara-cli|nexara)
       printf '%s\n' "$target"
       ;;
     *)
       printf 'Unknown publish target: %s\n' "$target" >&2
-      printf 'Expected one of: foundation, contracts, learning, compat, server, facade, all, or a Nexara crate name\n' >&2
+      printf 'Expected one of: foundation, contracts, learning, policy, compat, server, facade, all, or a Nexara crate name\n' >&2
       return 1
       ;;
   esac
@@ -439,6 +451,11 @@ learning() {
   package_crate nexara-learning-sled
 }
 
+policy() {
+  package_crate nexara-policy
+  package_crate nexara-cli
+}
+
 compat() {
   package_crate nexara-compat-qwen
 }
@@ -469,6 +486,10 @@ dry_run_publish() {
       dry_run_publish_crate_or_skip nexara-learning-jsonl nexara-learning
       dry_run_publish_crate_or_skip nexara-learning-sled nexara-learning
       ;;
+    policy)
+      dry_run_publish_crate_or_skip nexara-policy nexara-core
+      dry_run_publish_crate_or_skip nexara-cli nexara-core nexara-policy
+      ;;
     compat)
       dry_run_publish_crate_or_skip nexara-compat-qwen nexara-remote
       ;;
@@ -484,20 +505,22 @@ dry_run_publish() {
       dry_run_publish_crate_or_skip nexara-registry nexara-core
       dry_run_publish_crate_or_skip nexara-remote nexara-core
       dry_run_publish_crate_or_skip nexara-runtime nexara-core
+      dry_run_publish_crate_or_skip nexara-policy nexara-core
       dry_run_publish_crate_or_skip nexara-learning nexara-core
       dry_run_publish_crate_or_skip nexara-learning-memory nexara-learning
       dry_run_publish_crate_or_skip nexara-learning-jsonl nexara-learning
       dry_run_publish_crate_or_skip nexara-learning-sled nexara-learning
       dry_run_publish_crate_or_skip nexara-compat-qwen nexara-remote
       dry_run_publish_crate_or_skip nexara-server nexara-core nexara-registry nexara-runtime nexara-secrets
-      dry_run_publish_crate_or_skip nexara nexara-core nexara-registry nexara-remote nexara-secrets nexara-runtime nexara-learning nexara-learning-memory nexara-learning-jsonl nexara-learning-sled nexara-compat-qwen nexara-server
+      dry_run_publish_crate_or_skip nexara-cli nexara-core nexara-policy
+      dry_run_publish_crate_or_skip nexara nexara-core nexara-registry nexara-remote nexara-secrets nexara-runtime nexara-policy nexara-learning nexara-learning-memory nexara-learning-jsonl nexara-learning-sled nexara-compat-qwen nexara-server
       ;;
-    nexara-core|nexara-secrets|nexara-registry|nexara-remote|nexara-runtime|nexara-learning|nexara-learning-memory|nexara-learning-jsonl|nexara-learning-sled|nexara-compat-qwen|nexara-server|nexara)
+    nexara-core|nexara-secrets|nexara-registry|nexara-remote|nexara-runtime|nexara-policy|nexara-learning|nexara-learning-memory|nexara-learning-jsonl|nexara-learning-sled|nexara-compat-qwen|nexara-server|nexara-cli|nexara)
       dry_run_publish_crate "$target"
       ;;
     *)
       printf 'Unknown dry-run-publish target: %s\n' "$target" >&2
-      printf 'Expected one of: foundation, contracts, learning, compat, server, facade, all, or a Nexara crate name\n' >&2
+      printf 'Expected one of: foundation, contracts, learning, policy, compat, server, facade, all, or a Nexara crate name\n' >&2
       exit 1
       ;;
   esac
@@ -545,13 +568,15 @@ Recommended publish order:
   3.  cargo publish --manifest-path "$manifest_path" -p nexara-registry
   4.  cargo publish --manifest-path "$manifest_path" -p nexara-remote
   5.  cargo publish --manifest-path "$manifest_path" -p nexara-runtime
-  6.  cargo publish --manifest-path "$manifest_path" -p nexara-learning
-  7.  cargo publish --manifest-path "$manifest_path" -p nexara-learning-memory
-  8.  cargo publish --manifest-path "$manifest_path" -p nexara-learning-jsonl
-  9.  cargo publish --manifest-path "$manifest_path" -p nexara-learning-sled
-  10. cargo publish --manifest-path "$manifest_path" -p nexara-compat-qwen
-  11. cargo publish --manifest-path "$manifest_path" -p nexara-server
-  12. cargo publish --manifest-path "$manifest_path" -p nexara
+  6.  cargo publish --manifest-path "$manifest_path" -p nexara-policy
+  7.  cargo publish --manifest-path "$manifest_path" -p nexara-learning
+  8.  cargo publish --manifest-path "$manifest_path" -p nexara-learning-memory
+  9.  cargo publish --manifest-path "$manifest_path" -p nexara-learning-jsonl
+  10. cargo publish --manifest-path "$manifest_path" -p nexara-learning-sled
+  11. cargo publish --manifest-path "$manifest_path" -p nexara-compat-qwen
+  12. cargo publish --manifest-path "$manifest_path" -p nexara-server
+  13. cargo publish --manifest-path "$manifest_path" -p nexara-cli
+  14. cargo publish --manifest-path "$manifest_path" -p nexara
 
 Recommended verification flow:
   $(basename "$0") preflight
@@ -591,6 +616,9 @@ case "$phase" in
     ;;
   learning)
     learning
+    ;;
+  policy)
+    policy
     ;;
   compat)
     compat

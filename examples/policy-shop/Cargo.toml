@@ -1,0 +1,19 @@
+[package]
+name = "policy-shop"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Nexara one-line policy authoring shop demo"
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+publish = false
+
+[dependencies]
+anyhow.workspace = true
+nexara-core = { path = "../../crates/nexara-core", version = "0.1.1" }
+nexara-policy = { path = "../../crates/nexara-policy", version = "0.1.1" }
+serde_json.workspace = true

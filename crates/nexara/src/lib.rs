@@ -10,6 +10,8 @@ pub use nexara_learning_jsonl as learning_jsonl;
 pub use nexara_learning_memory as learning_memory;
 #[cfg(feature = "learning-sled")]
 pub use nexara_learning_sled as learning_sled;
+#[cfg(feature = "policy")]
+pub use nexara_policy as policy_authoring;
 #[cfg(feature = "registry")]
 pub use nexara_registry as registry;
 #[cfg(feature = "remote")]

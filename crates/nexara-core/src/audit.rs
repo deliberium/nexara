@@ -17,6 +17,10 @@ pub enum PolicyDecision {
     DeniedConcurrencyLimit,
     DeniedInvalidParams,
     DeniedServiceUnavailable,
+    DeniedPolicyContract,
+    DeniedMissingCapabilities,
+    DeniedNoMatchingAllow,
+    DeniedPolicyConfirmationRequired,
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]

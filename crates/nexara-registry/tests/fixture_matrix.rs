@@ -9,6 +9,7 @@ use nexara_registry::{
     SignedSkillIndexEntry, SignedSkillIndexPublisher, SignedSkillIndexSignature,
     SkillPublisherTrust, SkillRuntime, parse_skill_manifest_str, validate_host_requirements,
 };
+use sha2::{Digest, Sha256};
 
 const VALID: &str = r#"
 name = "fixture-search"
@@ -151,6 +152,66 @@ fn confirmation_required_signed_index_fixture_surfaces_policy() {
     verifier.verify_index(&index).unwrap();
 
     assert!(index.skills[0].requires_confirmation);
+}
+
+#[test]
+fn signed_index_fixture_binds_semantic_manifest_metadata_by_hash() {
+    let semantic_manifest = VALID.to_string()
+        + r#"
+[[capabilities]]
+id = "orders.refunds.create"
+name = "create_order_refund"
+description = "Issue a refund for an order"
+display_name = "Create order refund"
+resource = "orders"
+resource_path = ["orders", "refunds"]
+operation = "create"
+action_class = "write"
+sensitivity = "financial"
+
+[[effects]]
+resource = "refunds"
+operation = "create"
+writes = true
+external_side_effect = true
+financial_side_effect = true
+irreversible = false
+"#;
+    let metadata = parse_skill_manifest_str(&semantic_manifest).unwrap();
+    assert_eq!(
+        metadata.capabilities[0].id.as_deref(),
+        Some("orders.refunds.create")
+    );
+    assert_eq!(metadata.effects[0].resource, "refunds");
+
+    let mut entry = skill_entry("example/semantic-refunds", ">=0.1.0", Vec::new(), true);
+    entry.manifest_sha256 = sha256_hex(semantic_manifest.as_bytes());
+    let (index, verifier) = signed_index_fixture(entry);
+    verifier.verify_index(&index).unwrap();
+    assert_eq!(
+        index.skills[0].manifest_sha256,
+        sha256_hex(semantic_manifest.as_bytes())
+    );
+
+    let tampered_manifest = semantic_manifest.replace(
+        "id = \"orders.refunds.create\"",
+        "id = \"orders.refunds.read\"",
+    );
+    assert_ne!(
+        index.skills[0].manifest_sha256,
+        sha256_hex(tampered_manifest.as_bytes())
+    );
+}
+
+fn sha256_hex(bytes: &[u8]) -> String {
+    let digest = Sha256::digest(bytes);
+    digest
+        .iter()
+        .fold(String::with_capacity(64), |mut out, byte| {
+            use std::fmt::Write;
+            let _ = write!(out, "{byte:02x}");
+            out
+        })
 }
 
 fn signed_index_fixture(
