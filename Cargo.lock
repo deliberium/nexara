@@ -876,7 +876,7 @@ dependencies = [
 
 [[package]]
 name = "nexara"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "nexara-compat-qwen",
  "nexara-core",
@@ -894,7 +894,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-cli"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "base64",
@@ -906,7 +906,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-compat-qwen"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "nexara-remote",
@@ -916,7 +916,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-core"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "serde",
  "serde_json",
@@ -927,7 +927,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-example-custom-remote-discovery"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -939,7 +939,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-example-custom-skill-index"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "nexara-registry",
@@ -950,7 +950,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-example-embedded-basic"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -962,7 +962,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-example-learning-signals"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "nexara-core",
@@ -972,7 +972,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-example-local-http-server"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -988,7 +988,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-learning"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "nexara-core",
@@ -998,7 +998,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-learning-jsonl"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "nexara-learning",
@@ -1008,14 +1008,14 @@ dependencies = [
 
 [[package]]
 name = "nexara-learning-memory"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "nexara-learning",
 ]
 
 [[package]]
 name = "nexara-learning-sled"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "nexara-learning",
@@ -1027,7 +1027,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-policy"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "base64",
@@ -1040,7 +1040,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-registry"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1060,7 +1060,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-remote"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1074,7 +1074,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-runtime"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1086,7 +1086,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-secrets"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "aes-gcm-siv",
  "anyhow",
@@ -1103,7 +1103,7 @@ dependencies = [
 
 [[package]]
 name = "nexara-server"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1183,7 +1183,7 @@ dependencies = [
 
 [[package]]
 name = "policy-shop"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "nexara-core",

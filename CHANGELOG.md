@@ -19,6 +19,17 @@ and this project follows semantic versioning once public releases begin.
 
 - None yet.
 
+## [0.1.2] - 2026-10-22
+
+### Security
+
+- Updated the locked QUIC, TLS, certificate trust, and crossbeam dependencies to resolve current RustSec vulnerabilities.
+- Updated anyhow to fix its reported downcast unsoundness and replaced the yanked chacha20 dependency release.
+
+### Changed
+
+- Refreshed all Rust crate and JavaScript SDK versions to 0.1.2 without public API changes.
+
 ## [0.1.1] - 2026-05-27
 
 ### Added
@@ -68,6 +79,7 @@ and this project follows semantic versioning once public releases begin.
 - Release checklist for package verification and downstream host adapter validation.
 - Public documentation pass for architecture, deployment, release validation, skill manifests, remote protocol, and threat model.
 
-[Unreleased]: https://github.com/deliberium/nexara/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/deliberium/nexara/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/deliberium/nexara/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/deliberium/nexara/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/deliberium/nexara/releases/tag/v0.1.0

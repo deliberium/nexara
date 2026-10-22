@@ -1,7 +1,9 @@
 [advisories]
 version = 2
 yanked = "warn"
-ignore = []
+# Optional sled backend dependencies have no maintained compatible replacement.
+# Keep these maintenance-only exceptions scoped to their advisory IDs.
+ignore = ["RUSTSEC-2025-0057", "RUSTSEC-2024-0384"]
 
 [licenses]
 version = 2
@@ -9,6 +11,7 @@ allow = [
   "Apache-2.0",
   "BSD-2-Clause",
   "BSD-3-Clause",
+  "CDLA-Permissive-2.0",
   "ISC",
   "MIT",
   "Unicode-3.0",

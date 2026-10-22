@@ -14,6 +14,6 @@ publish = false
 
 [dependencies]
 anyhow.workspace = true
-nexara-core = { path = "../../crates/nexara-core", version = "0.1.1" }
-nexara-policy = { path = "../../crates/nexara-policy", version = "0.1.1" }
+nexara-core = { path = "../../crates/nexara-core", version = "0.1.2" }
+nexara-policy = { path = "../../crates/nexara-policy", version = "0.1.2" }
 serde_json.workspace = true

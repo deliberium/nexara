@@ -15,10 +15,10 @@ categories.workspace = true
 anyhow.workspace = true
 async-trait.workspace = true
 axum.workspace = true
-nexara-core = { path = "../nexara-core", version = "0.1.1" }
-nexara-registry = { path = "../nexara-registry", version = "0.1.1" }
-nexara-runtime = { path = "../nexara-runtime", version = "0.1.1" }
-nexara-secrets = { path = "../nexara-secrets", version = "0.1.1" }
+nexara-core = { path = "../nexara-core", version = "0.1.2" }
+nexara-registry = { path = "../nexara-registry", version = "0.1.2" }
+nexara-runtime = { path = "../nexara-runtime", version = "0.1.2" }
+nexara-secrets = { path = "../nexara-secrets", version = "0.1.2" }
 serde.workspace = true
 serde_json.workspace = true
 subtle.workspace = true
