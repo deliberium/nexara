@@ -1,6 +1,6 @@
 [package]
 name = "nexara-example-embedded-basic"
-version = "0.1.1"
+version = "0.1.2"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -9,7 +9,7 @@ publish = false
 [dependencies]
 anyhow.workspace = true
 async-trait.workspace = true
-nexara-core = { path = "../../crates/nexara-core" }
-nexara-runtime = { path = "../../crates/nexara-runtime" }
+nexara-core = { path = "../../crates/nexara-core", version = "0.1.2" }
+nexara-runtime = { path = "../../crates/nexara-runtime", version = "0.1.2" }
 serde_json.workspace = true
 tokio.workspace = true

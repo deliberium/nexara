@@ -1,6 +1,6 @@
 [package]
 name = "nexara-example-learning-signals"
-version = "0.1.1"
+version = "0.1.2"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -8,6 +8,6 @@ publish = false
 
 [dependencies]
 anyhow.workspace = true
-nexara-core = { path = "../../crates/nexara-core" }
-nexara-learning = { path = "../../crates/nexara-learning" }
+nexara-core = { path = "../../crates/nexara-core", version = "0.1.2" }
+nexara-learning = { path = "../../crates/nexara-learning", version = "0.1.2" }
 serde_json.workspace = true

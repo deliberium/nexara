@@ -13,7 +13,7 @@ categories.workspace = true
 
 [dependencies]
 anyhow.workspace = true
-nexara-learning = { path = "../nexara-learning", version = "0.1.1" }
+nexara-learning = { path = "../nexara-learning", version = "0.1.2" }
 serde_json.workspace = true
 
 [dev-dependencies]

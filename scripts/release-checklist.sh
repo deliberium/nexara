@@ -180,12 +180,14 @@ release_candidate() {
   run grep -Fq 'host_requirements' "$repo_root/README.md"
   run grep -Fq 'host_requirements' "$repo_root/docs/skill-manifest-spec.md"
   run grep -Fq 'nexara-architecture.svg' "$repo_root/README.md"
-  run grep -Fq '[0.1.1]' "$repo_root/CHANGELOG.md"
+  local release_version
+  release_version="$(awk -F\" '/^version = / { print $2; exit }' "$manifest_path")"
+  run grep -Fq "## [$release_version]" "$repo_root/CHANGELOG.md"
 }
 
 security() {
   run cargo audit
-  run cargo deny check --manifest-path "$manifest_path"
+  run cargo deny --manifest-path "$manifest_path" check
 }
 
 package_crate() {

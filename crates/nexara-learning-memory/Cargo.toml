@@ -12,5 +12,5 @@ keywords.workspace = true
 categories.workspace = true
 
 [dependencies]
-nexara-learning = { path = "../nexara-learning", version = "0.1.1" }
+nexara-learning = { path = "../nexara-learning", version = "0.1.2" }
 

@@ -1,6 +1,6 @@
 [package]
 name = "nexara-example-custom-skill-index"
-version = "0.1.1"
+version = "0.1.2"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -8,7 +8,7 @@ publish = false
 
 [dependencies]
 anyhow.workspace = true
-nexara-registry = { path = "../../crates/nexara-registry" }
+nexara-registry = { path = "../../crates/nexara-registry", version = "0.1.2" }
 serde_json.workspace = true
 sha2.workspace = true
 tempfile.workspace = true

@@ -38,15 +38,15 @@ all = [
 ]
 
 [dependencies]
-nexara-core = { path = "../nexara-core", version = "0.1.1" }
-nexara-registry = { path = "../nexara-registry", version = "0.1.1", optional = true }
-nexara-remote = { path = "../nexara-remote", version = "0.1.1", optional = true }
-nexara-secrets = { path = "../nexara-secrets", version = "0.1.1", optional = true }
-nexara-runtime = { path = "../nexara-runtime", version = "0.1.1", optional = true }
-nexara-learning = { path = "../nexara-learning", version = "0.1.1", optional = true }
-nexara-learning-memory = { path = "../nexara-learning-memory", version = "0.1.1", optional = true }
-nexara-learning-jsonl = { path = "../nexara-learning-jsonl", version = "0.1.1", optional = true }
-nexara-learning-sled = { path = "../nexara-learning-sled", version = "0.1.1", optional = true }
-nexara-compat-qwen = { path = "../nexara-compat-qwen", version = "0.1.1", optional = true }
-nexara-server = { path = "../nexara-server", version = "0.1.1", optional = true }
-nexara-policy = { path = "../nexara-policy", version = "0.1.1", optional = true }
+nexara-core = { path = "../nexara-core", version = "0.1.2" }
+nexara-registry = { path = "../nexara-registry", version = "0.1.2", optional = true }
+nexara-remote = { path = "../nexara-remote", version = "0.1.2", optional = true }
+nexara-secrets = { path = "../nexara-secrets", version = "0.1.2", optional = true }
+nexara-runtime = { path = "../nexara-runtime", version = "0.1.2", optional = true }
+nexara-learning = { path = "../nexara-learning", version = "0.1.2", optional = true }
+nexara-learning-memory = { path = "../nexara-learning-memory", version = "0.1.2", optional = true }
+nexara-learning-jsonl = { path = "../nexara-learning-jsonl", version = "0.1.2", optional = true }
+nexara-learning-sled = { path = "../nexara-learning-sled", version = "0.1.2", optional = true }
+nexara-compat-qwen = { path = "../nexara-compat-qwen", version = "0.1.2", optional = true }
+nexara-server = { path = "../nexara-server", version = "0.1.2", optional = true }
+nexara-policy = { path = "../nexara-policy", version = "0.1.2", optional = true }
